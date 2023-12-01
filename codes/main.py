@@ -1,4 +1,5 @@
 import requests
+import config
 
 def get_weather(api_key, host, location):
     base_url = f"https://open-weather13.p.rapidapi.com/city/{location}"
@@ -42,7 +43,7 @@ def advise_outfit(weather):
         print("It might be cold today. Kindly dress in warm clothing.")
 
 if __name__ == "__main__":
-    api_key = "8ce21f2236mshcbf84f6e2280e2cp117fe4jsnc55cc5abc489"
+    api_key = config.API_KEY
     host = "open-weather13.p.rapidapi.com"
     location = input("Choose your city: ")
 
