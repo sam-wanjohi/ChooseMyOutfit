@@ -38,7 +38,12 @@ def advise_outfit(weather):
     if heat > 24:
         print("It's quite warm today! Light clothing would be great.")
     elif 14 <= heat <= 24:
-        print("The heat today is roughly average. Consider wearing light clothes but take a scarf or jacket with you in case it gets colder.")
+        if "rain" in conditions.lower():
+            print("You might want to bring an umbrella")
+        else:
+            print(
+                "The heat today is roughly average. Consider wearing light clothes but take a scarf or jacket with you in case it gets colder."
+            )
     else:
         print("It might be cold today. Kindly dress in warm clothing.")
 
