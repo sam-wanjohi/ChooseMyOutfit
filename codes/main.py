@@ -1,7 +1,17 @@
 import requests
 import config
+# import config file which contains apikey for security of the key
 
 def get_weather(api_key, host, location):
+    """
+    Retrieves weather data for a specific location.
+
+    :param api_key: The API key for accessing the weather API. (str)
+    :param host: The host for accessing the weather API. (str)
+    :param location: The location for which to retrieve weather data. (str)
+
+    :return: The weather data for the specified location. Returns None if an error occurs. (dict or None)
+    """
     base_url = f"https://open-weather13.p.rapidapi.com/city/{location}"
     headers = {
         "X-RapidAPI-Key": api_key,
@@ -25,6 +35,14 @@ def get_weather(api_key, host, location):
         return None
 
 def advise_outfit(weather):
+    """
+    Generates an outfit advice based on the weather.
+
+    Args:
+        weather (dict): A dictionary containing weather information.
+    return:
+        An outfit message according to the weather condition of a chosen city
+    """
     if "main" not in weather or "temp" not in weather["main"]:
         print("Error: Unable to retrieve weather information.")
         return
