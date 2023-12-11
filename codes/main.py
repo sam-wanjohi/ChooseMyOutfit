@@ -1,38 +1,25 @@
 import requests
 import config
-# import config file which contains apikey for security of the key
 
-def get_weather(api_key, host, location):
-    """
-    Retrieves weather data for a specific location.
 
-    :param api_key: The API key for accessing the weather API. (str)
-    :param host: The host for accessing the weather API. (str)
-    :param location: The location for which to retrieve weather data. (str)
-
-    :return: The weather data for the specified location. Returns None if an error occurs. (dict or None)
-    """
-    base_url = f"https://open-weather13.p.rapidapi.com/city/{location}"
-    headers = {
-        "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-Host": host
+def get_weather(api_key, city):
+    base_url = "https://api.openweathermap.org/data/2.5/weather"
+    params = {
+        "q": f"{city}",
+        "units": "metric",
+        "APPID": api_key,
     }
-    params = {"q": location, "units": "metric"}
 
     try:
-        response = requests.get(base_url, headers=headers, params=params)
-        data = response.json()
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()  # Raise HTTPError for bad responses
+        weather_data = response.json()
+        return weather_data
 
-        if response.status_code == 200:
-            return data
-        else:
-            error_message = data.get('sorry! An error occurred.', 'Unknown error')
-            print(f"Error: {error_message}")
-            return None
-
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error: {str(e)}")
         return None
+
 
 def advise_outfit(weather):
     """
@@ -57,7 +44,7 @@ def advise_outfit(weather):
         print("It's quite warm today! Light clothing would be great.")
     elif 14 <= heat <= 24:
         if "rain" in conditions.lower():
-            print("You might want to bring an umbrella")
+            print("It might rain, You might want to bring an umbrella")
         else:
             print(
                 "The heat today is roughly average. Consider wearing light clothes but take a scarf or jacket with you in case it gets colder."
@@ -65,13 +52,20 @@ def advise_outfit(weather):
     else:
         print("It might be cold today. Kindly dress in warm clothing.")
 
+
 if __name__ == "__main__":
     api_key = config.API_KEY
-    host = "open-weather13.p.rapidapi.com"
-    location = input("Choose your city: ")
+    while True:
+        city = input("Enter your location (or type 'exit' to quit): ")
 
-    weather_data = get_weather(api_key, host, location)
+        if city.lower() == "exit":
+            print("Exiting the weather app. Goodbye!")
+            break
 
-    if weather_data:
-        advise_outfit(weather_data)
+        weather_data = get_weather(api_key, city)
+
+        if weather_data:
+            advise_outfit(weather_data)
+        else:
+            print("Failed to retrieve weather data.")
 
