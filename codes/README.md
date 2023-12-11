@@ -44,5 +44,4 @@ CONFIGURATION
 ChooseMyOutfit uses the Open weather API.To configure your API key, create a file named config.py in the project root and add the following:
 # config.py
 
-API_KEY = "8ce21f2236mshcbf84f6e2280e2cp117fe4jsnc55cc5abc489"
 
